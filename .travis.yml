@@ -1,0 +1,15 @@
+sudo: false
+language: haskell
+
+ghc:
+  - "7.8"
+  - "7.10"
+  - "8.0"
+
+script:
+  - make build
+  - make test
+
+notifications:
+  email: false
+  irc: "irc.freenode.org#XelNext"
