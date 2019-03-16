@@ -1,0 +1,15 @@
+# Hi
+## Some huconf comment
+# End
+
+#@if shell
+shell-included
+#@else
+shell-excluded
+#@endif
+
+#@if server
+server-excluded
+#@else
+server-included
+#@endif
