@@ -2,9 +2,11 @@ sudo: false
 language: haskell
 
 ghc:
-  - "7.8"
   - "7.10"
   - "8.0"
+
+install:
+  - echo "No deps."
 
 script:
   - make build
