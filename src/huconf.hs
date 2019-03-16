@@ -117,6 +117,16 @@ lexLines lines = foldr _lexMergeFolder [] (map _baseLexLine lines)
 -- huconfParse cats xs = DM.catMaybes $ parseLines cats [(ParserOut, True)] (map lexLine xs)
 -- 
 
+split :: Char -> String -> [String]
+split c s = _split c "" s
+
+_split :: Char -> String -> String -> [String]
+_split c "" "" = []
+_split c x "" = [(reverse x)]
+_split c x (d:rem) | c == d && x == "" = _split c "" rem
+                   | c == d = (reverse x):(_split c "" rem)
+                   | otherwise = _split c (d:x) rem
+
 evalContent :: BlockLine -> Maybe String
 evalContent (BlockComment _) = Nothing
 evalContent (BlockText l) = Just l
@@ -133,9 +143,9 @@ huconfParse :: [String] -> [FileTree]
 huconfParse = fullParse . lexLines
 
 main = do
-    (filename:categories) <- SE.getArgs
+    (filename:categories:_ignored) <- SE.getArgs
     handle <- SIO.openFile filename SIO.ReadMode
     contents <- hGetContents handle
     let fileLines = lines contents
-    mapM_ putStrLn $ huconfEval categories $ huconfParse fileLines
+    mapM_ putStrLn $ huconfEval (split ',' categories) $ huconfParse fileLines
 
